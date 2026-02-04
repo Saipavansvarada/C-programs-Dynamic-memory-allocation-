@@ -1,169 +1,96 @@
-/*Binary Search tree sing functions(create(),insert(),search(),
-            inorder(),preorder(),postorder())*/
-
 #include<stdio.h>
 #include<stdlib.h>
-#include<string.h>
 struct node{
-    int data;
+    struct node *right,*left;
+    int isbn;
     char title[50];
-    struct node*left,*right;
-}*root=NULL;
+};
 
-struct node *create(int val,char t[]){
-    struct node*newnode;
-    newnode=(struct node*)malloc(sizeof(struct node));
-    strcpy(newnode->title,t);
-    newnode->title[49] = '\0';
-    newnode->data=val;
-    newnode->left=newnode->right=NULL;
-    return newnode;
-}
-struct node *insert(struct node *root,int val,char t[]){
-if (root==NULL){
-   return create(val,t);
-}
-if(val<root->data){
-    root->left=insert(root->left,val,t);
-}
-else if(val>root->data){
-    root->right=insert(root->right,val,t);
-}
-return root;
+struct node *create(int isbn){
+    struct node *nn=(struct node*)malloc(sizeof(struct node));
+    nn->left=nn->right=NULL;
+    printf("Enter book tilte:\n");
+    scanf("%s",nn->title);
+    nn->isbn=isbn;
+    return nn; 
 }
 
-struct node *search(struct node*root,int key){
-    if(root==NULL||root->data==key){
-        return root;
-    }
-    if(key<root->data){
-        return search(root->left,key);
-    }
-    else if (key>root->data){
-        return search(root->right,key); 
-       }
+struct node *insert(struct node *root,int isbn){
+    if(root==NULL)
+        return create(isbn);
+    else if (isbn<root->isbn)
+        root->left=insert(root->left,isbn);
+    else if(isbn>root->isbn)
+        root->right=insert(root->right,isbn);
+
+    return root;
 }
-void inorder(struct node*root){
+ void inorder(struct node* root){
     if(root==NULL){
         return;
     }else{
     inorder(root->left);
-    printf("%d",root->data);
+    printf("%d %s\n",root->isbn,root->title);
     inorder(root->right);
-}
-}
-void postorder(struct node*root){
+    }
+ }
+void preorder(struct node* root){
     if(root==NULL){
         return;
+    }else{
+    printf("%d %s\n",root->isbn,root->title);
+    preorder(root->left);
+    preorder(root->right);
+    }
+ }
+ void postorder(struct node* root){
+    if(root==NULL){
+        return;
+
     }else{
     postorder(root->left);
     postorder(root->right);
-    printf("%d",root->data);
-}
-}
-void preorder(struct node*root){
-    if(root==NULL){
-        return;
-    }else{
-    printf("%d",root->data);    
-    preorder(root->left);
-    preorder(root->right);
-    
-}
-}
-// Utility for memory cleanup
-void freeBST(struct node *node) {
-    if (node != NULL) {
-        freeBST(node->left);
-        freeBST(node->right);
-        free(node);
+    printf("%d %s\n",root->isbn,root->title);
     }
-}
-
-int main(){
-    int choice;
-    char title_input[50]; // Renamed 'a' to 'title_input' for clarity
-    int val_input;
-    int key_input;
-    struct node *result_node;
-
-    printf("--- Library Book Database (BST) ---\n");
-
-    while(1) {
-        printf("\n\nSelect an operation:\n");
-        printf("1. Insert a book (ID/Key and Title)\n");
-        printf("2. Search for a book by ID/Key\n");
-        printf("3. Traverse (Inorder)\n");
-        printf("4. Traverse (Preorder)\n");
-        printf("5. Traverse (Postorder)\n");
-        printf("6. Exit\n");
-        printf("Enter choice: ");
-       scanf("%d",&choice);
-        
-
-        switch (choice) {
-            case 1: 
-                printf("Enter Book ID/Key (integer): ");
-                scanf("%d", &val_input);
-                
-                printf("Enter the book title: ");
-                scanf("%s",title_input);
-                
-                root = insert(root, val_input, title_input); 
-                printf("Book ID %d inserted successfully.\n", val_input);
-                break;
-
-            case 2: 
-                printf("Enter Book ID/Key to search: ");
-                scanf("%d", &key_input);
-                result_node = search(root, key_input);
-                    if (result_node != NULL) {
-                        printf("\n--- Book Found ---\n");
-                        printf("ID: %d\nTitle: %s\n", result_node->data, result_node->title);
-                        printf("------------------\n");
-                    } else {
-                        printf("Book with ID %d NOT found.\n", key_input);
-                    }
-                break;
-
-            case 3: 
-                printf("\n--- Inorder Traversal (Sorted by ID) ---\n");
-                if (root == NULL) {
-                    printf("BST is empty.\n");
-                } else {
-                    inorder(root);
-                }
-                printf("\n");
-                break;
-
-            case 4: 
-                printf("\n--- Preorder Traversal ---\n");
-                if (root == NULL) {
-                    printf("BST is empty.\n");
-                } else {
-                    preorder(root);
-                }
-                printf("\n");
-                break;
-
-            case 5:
-                printf("\n--- Postorder Traversal ---\n");
-                if (root == NULL) {
-                    printf("BST is empty.\n");
-                } else {
-                    postorder(root);
-                }
-                printf("\n");
-                break;
-
-            case 6: // Exit
-                printf("Exiting program. Clearing memory...\n");
-                freeBST(root);
-                break;
-
-            default:
-                printf("Invalid choice. Please select a number between 1 and 6.\n");
+ }
+ void search(struct node *root ,int isbn){
+    while(root!=NULL){
+        if(root->isbn==isbn){
+            printf("key found");
+            return;
+        }else if(isbn>root->isbn){
+            root=root->right;
+        }else{
+            root=root->left;
         }
-    } 
-return 0;
-}
+    }printf("key not found");
+    return;
+ }
+ int main(){
+    struct node *root=NULL;
+    int choice,isbn;
+    while(1){
+        printf("enter\n");
+        printf("1.insert\n2.pre\n3.post\n4.inorder\n5.search\n6.exit\n");
+        scanf("%d",&choice);
+        switch(choice){
+            case 1: printf("enter isbn:");
+                    scanf("%d",&isbn);
+                    root= insert(root,isbn);
+                    break;
+            case 2: preorder(root);
+                    break;
+            case 3:postorder(root);
+                    break;
+            case 4:inorder(root);
+                    break;
+            case 5:printf("enter isbn to search:");
+                    scanf("%d",&isbn);
+                    search(root,isbn);
+                    break;
+            case 6:exit(0);
+            default:printf("invalid choice");
+            break;
+                }   
+     }
+ }
