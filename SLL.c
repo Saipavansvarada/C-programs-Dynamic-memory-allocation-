@@ -1,3 +1,8 @@
+/*Singly linklist(SLL) using Dynamic memory allocation and using some functions 
+create,dispaly,insert node from front and end,delete form front and end*/
+
+
+
 #include<stdio.h>
 #include<stdlib.h>
 struct node{

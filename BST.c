@@ -1,3 +1,6 @@
+/*Binary Search tree sing functions(create(),insert(),search(),
+            inorder(),preorder(),postorder())*/
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>

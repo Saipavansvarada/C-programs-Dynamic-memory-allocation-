@@ -1,3 +1,7 @@
+// Hashing 
+//Vehical management system
+
+
 #include <stdio.h>
 #include <stdlib.h>
 
